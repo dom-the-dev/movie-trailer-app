@@ -37,7 +37,9 @@ function App() {
         setMovies(data.results)
         setMovie(data.results[0])
 
-        await fetchMovie(data.results[0].id)
+        if (data.results.length) {
+            await fetchMovie(data.results[0].id)
+        }
     }
 
     const fetchMovie = async (id) => {
@@ -77,57 +79,64 @@ function App() {
     return (
         <div className="App">
             <header className="center-max-size header">
-                <span>Movie Trailer App</span>
+                <span className={"brand"}>Movie Trailer App</span>
                 <form className="form" onSubmit={fetchMovies}>
-                    <input type="text" id="search" onInput={(event) => setSearchKey(event.target.value)}/>
-                    <button type="submit">Search</button>
+                    <input className="search" type="text" id="search"
+                           onInput={(event) => setSearchKey(event.target.value)}/>
+                    <button className="submit-search" type="submit"><i className="fa fa-search"></i></button>
                 </form>
             </header>
-            <main>
-                <div className="poster"
-                     style={{backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${BACKDROP_PATH}${movie.backdrop_path})`}}>
-                    {playing ?
-                        <>
-                            <Youtube
-                                videoId={trailer.key}
-                                className={"youtube amru"}
-                                containerClassName={"youtube-container amru"}
-                                opts={
-                                    {
-                                        width: '100%',
-                                        height: '100%',
-                                        playerVars: {
-                                            autoplay: 1,
-                                            controls: 0,
-                                            cc_load_policy: 0,
-                                            fs: 0,
-                                            iv_load_policy: 0,
-                                            modestbranding: 0,
-                                            rel: 0,
-                                            showinfo: 0,
-                                        },
-                                    }
-                                }
-                            />
-                            <button onClick={() => setPlaying(false)} className={"button close-video"}>Close</button>
-                        </> :
-                        <div className="center-max-size">
-                            <div className="poster-content">
-                                {trailer ?
-                                <button className={"button play-video"} onClick={() => setPlaying(true)} type="button">Play
-                                    Trailer</button>
-                                : 'Sorry, no trailer available'}
-                                <h1>{movie.title}</h1>
-                                <p>{movie.overview}</p>
-                            </div>
+            {movies.length ?
+                <main>
+                    {movie ?
+                        <div className="poster"
+                             style={{backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${BACKDROP_PATH}${movie.backdrop_path})`}}>
+                            {playing ?
+                                <>
+                                    <Youtube
+                                        videoId={trailer.key}
+                                        className={"youtube amru"}
+                                        containerClassName={"youtube-container amru"}
+                                        opts={
+                                            {
+                                                width: '100%',
+                                                height: '100%',
+                                                playerVars: {
+                                                    autoplay: 1,
+                                                    controls: 0,
+                                                    cc_load_policy: 0,
+                                                    fs: 0,
+                                                    iv_load_policy: 0,
+                                                    modestbranding: 0,
+                                                    rel: 0,
+                                                    showinfo: 0,
+                                                },
+                                            }
+                                        }
+                                    />
+                                    <button onClick={() => setPlaying(false)} className={"button close-video"}>Close
+                                    </button>
+                                </> :
+                                <div className="center-max-size">
+                                    <div className="poster-content">
+                                        {trailer ?
+                                            <button className={"button play-video"} onClick={() => setPlaying(true)}
+                                                    type="button">Play
+                                                Trailer</button>
+                                            : 'Sorry, no trailer available'}
+                                        <h1>{movie.title}</h1>
+                                        <p>{movie.overview}</p>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
-                </div>
+                        : null}
 
-                <div className={"center-max-size container"}>
-                    {renderMovies()}
-                </div>
-            </main>
+                    <div className={"center-max-size container"}>
+                        {renderMovies()}
+                    </div>
+                </main>
+                : 'Sorry, no movies found'}
         </div>
     );
 }
