@@ -33,6 +33,7 @@ function App() {
             }
         })
 
+        console.log(data.results[0])
         setMovies(data.results)
         setMovie(data.results[0])
 

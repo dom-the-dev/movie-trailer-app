@@ -9,7 +9,10 @@ const Movie = ({movie, selectMovie}) => {
                 {movie.poster_path &&
                 <img src={IMAGE_PATH + movie.poster_path} alt={movie.title}/>
                 }
-                <h5>{movie.title}</h5>
+                <div className={"flex between movie-infos"}>
+                    <h5 className={"movie-title"}>{movie.title}</h5>
+                    {movie.vote_average ? <span className={"movie-voting"}>{movie.vote_average}</span> : null}
+                </div>
             </div>
         </div>
     );
